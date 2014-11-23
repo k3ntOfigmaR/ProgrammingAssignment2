@@ -1,8 +1,6 @@
 ## Put comments here that give an overall description of what your
 ## functions do
 
-## Write a short comment describing this function
-
 ##
 ## The following "makeCacheMatrix" function creates a special "matrix" object 
 ## that can cache its inverse. 
@@ -12,22 +10,29 @@
 ## or to set/modify the content of the matrix (ex: x$set(matrix(1:4, 2,2))), or
 ## to get the stored inverse of the matrix, or to set the externally calculated
 ## value of the matrix (using the cacheSolve function).
+## Syntaxe: 
+##
+## "x" is the user provided matrix
+## "inv" represents the stored inverse matrix
+## "get" is the method object that outputs the matrix object
+## "getinverse" is the method that outputs the calculated inverse matrix object
+## "set" is the method that stores the original matrix object
+## "setinverse" is the method that stores the calculated inverse matrix object
+##
 
 makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL
+  inv <- NULL            # Initializes the inverse matrix value
   set <- function(y) {
     x <<- y
     inv <<- NULL
   }
-  get <- function() { x }
+  get <- function() { x } 
   setinverse <- function(inverse_matrix) { inv <<- inverse_matrix }
   getinverse <- function() { inv }
   list(set = set, get = get,
        setinverse = setinverse,
        getinverse = getinverse)
 }
-
-## Write a short comment describing this function
 
 ##
 ## This function calculates the inverse of a matrix object.
@@ -39,14 +44,16 @@ makeCacheMatrix <- function(x = matrix()) {
 ##
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-  inv <- x$getinverse()
-  if(!is.null(inv)) {
+  inv <- x$getinverse()   # Retrieves the stored inverse matrix in 'x'
+  
+  # If the stored matrix retrieved was previously calculated, simply output the
+  # stored value.
+  if(!is.null(inv)) {     
     message("getting cached data")
     return(inv)
   }
-  data <- x$get()
-  inv <- solve(data, ...)
-  x$setinverse(inv)
+  data <- x$get()         # Retrieves the matrix from 'x'
+  inv <- solve(data, ...) # Calculates the inverse of the matrix
+  x$setinverse(inv)       # Stores the inverse of the matrix
   inv
 }
